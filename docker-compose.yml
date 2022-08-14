@@ -1,0 +1,26 @@
+version: "3"
+
+services:
+  hacklab:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    hostname: hacklab
+    ports:
+      - "2222:22"
+    cap_add:
+      - NET_ADMIN
+    devices:
+      - "/dev/net/tun"
+    volumes:
+      - type: bind
+        source: .data
+        target: /data
+        bind:
+          create_host_path: true
+      - type: volume
+        source: root
+        target: /root
+
+volumes:
+  root:
