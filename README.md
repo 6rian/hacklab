@@ -16,6 +16,7 @@ You will need to download and install [Docker Desktop](https://docs.docker.com/g
 
 ## Usage
 
+### Container Orchestration
 **Build and start container:**
 ```bash
 docker compose up -d
@@ -31,6 +32,17 @@ docker compose start
 docker compose stop
 ```
 
+### Connecting To The Lab
+
+If you ran the bootstrap script during installation, simply `ssh hacklab` to connect to the lab.
+
+If not, connect with `ssh brian@localhost -p 2222 -D 9999` where:
+- `-p` is the SSH port exposed to the host.
+- `-D` is the desired port for SOCKS proxy traffic.
+
+### Using Burp Suite On The Host
+
+Set the SOCKS proxy settings (`localhost:9999`) under the "User options" tab of Burp Suite to proxy traffic from the host through the lab. This requires having an active SSH connection to the lab with dynamic port forwarding enabled to work.
 
 ## Troubleshooting
 
