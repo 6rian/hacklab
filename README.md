@@ -11,7 +11,7 @@ You will need to download and install [Docker Desktop](https://docs.docker.com/g
 *The first time setup will take around 20+ minutes to complete.*
 
 1. Clone this repository.
-2. `./bootstrap.sh` add hacklab to your SSH configuration. *(optional)*
+2. `./install.sh` add hacklab to your SSH configuration.
 3. `docker compose up -d` to build the image and start the container.
 
 ## Usage
@@ -34,11 +34,20 @@ docker compose stop
 
 ### Connecting To The Lab
 
-If you ran the bootstrap script during installation, simply `ssh hacklab` to connect to the lab.
+**Connect as the primary user:**
+```bash
+ssh hacklab
+```
 
-If not, connect with `ssh brian@localhost -p 2222 -D 1337` where:
-- `-p` is the SSH port exposed to the host.
-- `-D` is the port for SOCKS proxy traffic.
+**Connect as root:**
+```bash
+ssh hacklab-root
+```
+
+*or:*
+```bash
+ssh root@hacklab
+```
 
 ### Using Burp Suite On The Host
 
