@@ -36,13 +36,13 @@ docker compose stop
 
 If you ran the bootstrap script during installation, simply `ssh hacklab` to connect to the lab.
 
-If not, connect with `ssh brian@localhost -p 2222 -D 9999` where:
+If not, connect with `ssh brian@localhost -p 2222 -D 1337` where:
 - `-p` is the SSH port exposed to the host.
-- `-D` is the desired port for SOCKS proxy traffic.
+- `-D` is the port for SOCKS proxy traffic.
 
 ### Using Burp Suite On The Host
 
-Set the SOCKS proxy settings (`localhost:9999`) under the "User options" tab of Burp Suite to proxy traffic from the host through the lab. This requires having an active SSH connection to the lab with dynamic port forwarding enabled to work.
+Set the SOCKS proxy settings (`localhost:1337`) under the "User options" tab of Burp Suite to proxy traffic from the host through the lab. This requires having an active SSH connection to the lab with dynamic port forwarding enabled to work.
 
 ## Troubleshooting
 
