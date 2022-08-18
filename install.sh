@@ -2,7 +2,8 @@
 
 BASE_DIR=$(pwd)
 DATA_DIR="$BASE_DIR/.data"
-HACKLAB_SSH_CONFIG_FILE="$BASE_DIR/conf/hacklab_ssh_config"
+HACKLAB_SSH_CONFIG_FILE_NAME="hacklab_ssh_config"
+HACKLAB_SSH_CONFIG_FILE_PATH="$BASE_DIR/conf/$HACKLAB_SSH_CONFIG_FILE_NAME"
 SYS_SSH_CONFIG_DIR="/etc/ssh/ssh_config.d"
 SYS_SSH_CONFIG_FILE="/etc/ssh/ssh_config"
 
@@ -81,22 +82,35 @@ read install_ssh_config
 
 if [ "$install_ssh_config" = "" ] || [[ "$install_ssh_config" =~ [Y|y] ]]
 then
-  
-  # Does the system SSH config directory exist? If not, make it.
+
   echo "Checking for the system SSH config directory: $SYS_SSH_CONFIG_DIR"
   if [ ! -d $SYS_SSH_CONFIG_DIR ]
   then
-    echo "[!] Directory does not exist. Creating it now."
+    echo " [!] Directory does not exist. Creating it now."
     mkdir -p $SYS_SSH_CONFIG_DIR
+  else
+    echo "- Directory found."
   fi
 
-  # check if ssh_config.d is being included
-  # if grep -qe "^Host \*" $SYS_SSH_CONFIG_FILE
+  echo ""
+  echo "Checking system ssh_config for inclusion of config directory."
   if ! grep -qe "^Include $SYS_SSH_CONFIG_DIR" $SYS_SSH_CONFIG_FILE
   then
+    echo " [!] SSH config files are not being included. Modifying ssh_config now."
     echo -e "\n\nInclude $SYS_SSH_CONFIG_DIR/*" >> $SYS_SSH_CONFIG_FILE
+  else
+    echo "- Config files are being included."
   fi
 
   # Create a symbolic link to the hacklab SSH config file.
-  # ln -s $HACKLAB_SSH_CONFIG_FILE $SYS_SSH_CONFIG_DIR
+  echo ""
+  echo "Checking for symlink to hacklab SSH config."
+  SSH_CONFIG_SYMLINK="$SYS_SSH_CONFIG_DIR/$HACKLAB_SSH_CONFIG_FILE_NAME"
+  if [ ! -L $SSH_CONFIG_SYMLINK ] || [ ! -e $SSH_CONFIG_SYMLINK ]
+  then
+    echo " [!] Symlink does not exist. Creating it now."
+    ln -s $HACKLAB_SSH_CONFIG_FILE_PATH $SYS_SSH_CONFIG_DIR
+  else
+    echo "- Symlink already exists."
+  fi
 fi
