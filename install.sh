@@ -10,78 +10,92 @@ SYS_SSH_CONFIG_FILE="/etc/ssh/ssh_config"
 # # Create directory for data persistence
 # mkdir -p $DATA_DIR
 
-# echo "
-#           _______  _______  _        _        _______  ______  
-# |\     /|(  ___  )(  ____ \| \    /\( \      (  ___  )(  ___ \ 
-# | )   ( || (   ) || (    \/|  \  / /| (      | (   ) || (   ) )
-# | (___) || (___) || |      |  (_/ / | |      | (___) || (__/ / 
-# |  ___  ||  ___  || |      |   _ (  | |      |  ___  ||  __ (  
-# | (   ) || (   ) || |      |  ( \ \ | |      | (   ) || (  \ \ 
-# | )   ( || )   ( || (____/\|  /  \ \| (____/\| )   ( || )___) )
-# |/     \||/     \|(_______/|_/    \/(_______/|/     \||/ \___/ 
+echo "
+          _______  _______  _        _        _______  ______  
+|\     /|(  ___  )(  ____ \| \    /\( \      (  ___  )(  ___ \ 
+| )   ( || (   ) || (    \/|  \  / /| (      | (   ) || (   ) )
+| (___) || (___) || |      |  (_/ / | |      | (___) || (__/ / 
+|  ___  ||  ___  || |      |   _ (  | |      |  ___  ||  __ (  
+| (   ) || (   ) || |      |  ( \ \ | |      | (   ) || (  \ \ 
+| )   ( || )   ( || (____/\|  /  \ \| (____/\| )   ( || )___) )
+|/     \||/     \|(_______/|_/    \/(_______/|/     \||/ \___/ 
                                                                
-#                                               by 6rian
+                                              by 6rian
 
-# "
+"
 
-# echo "[!] Preparing to build hacklab."
-# echo "[!] WARNING: Running this script will erase any existing hacklab container and create a new one."
-# echo ""
+echo "[!] Preparing to build hacklab."
+echo "[!] WARNING: Running this script will erase any existing hacklab container and create a new one."
+echo ""
 
-# echo "[*] Update root account."
-# echo -n "Set root's password: "
-# read root_password
-# echo -n "Confirm: "
-# read root_password_2
+echo "[*] Update root account."
+echo -n "Set root's password: "
+read -s root_password
+echo -en "\nConfirm: "
+read -s root_password_2
 
-# if [ "$root_password" != "$root_password_2" ]
-# then
-#   echo "[!] Passwords do not match."
-#   echo -n "Please try again: "
-#   read root_password_3
+if [ "$root_password" != "$root_password_2" ]
+then
+  echo "[!] Passwords do not match."
+  echo -n "Please try again: "
+  read -s root_password_3
 
-#   if [ "$root_password" != "$root_password_3" ]
-#   then
-#     echo ""
-#     echo "[!!] Fatal Error: Passwords still do not match."
-#     echo "Exiting..."
-#     exit -1
-#   fi
-# fi
+  if [ "$root_password" != "$root_password_3" ]
+  then
+    echo ""
+    echo "[!!] Fatal Error: Passwords still do not match."
+    echo "Exiting..."
+    exit -1
+  fi
+fi
 
-# echo ""
-# echo "[*] Create primary user account."
-# echo -n "Username: "
-# read primary_username
-# echo -n "Password: "
-# read primary_user_password
-# echo -n "Confirm: "
-# read primary_user_password_2
+echo ""
+echo "[*] Create primary user account."
+echo -n "Username: "
+read primary_user_name
+echo -n "Password: "
+read -s primary_user_password
+echo -en "\nConfirm: "
+read -s primary_user_password_2
 
-# if [ "$primary_user_password" != "$primary_user_password_2" ]
-# then
-#   echo "[!] Passwords do not match."
-#   echo -n "Please try again: "
-#   read primary_user_password_3
+if [ "$primary_user_password" != "$primary_user_password_2" ]
+then
+  echo "[!] Passwords do not match."
+  echo -n "Please try again: "
+  read -s primary_user_password_3
 
-#   if [ "$primary_user_password" != "$primary_user_password_3" ]
-#   then
-#     echo ""
-#     echo "[!!] Fatal Error: Passwords still do not match."
-#     echo "Exiting..."
-#     exit -1
-#   fi
-# fi
-
-# TODO: update primary username in conf/hacklab_ssh_config
+  if [ "$primary_user_password" != "$primary_user_password_3" ]
+  then
+    echo ""
+    echo "[!!] Fatal Error: Passwords still do not match."
+    echo "Exiting..."
+    exit -1
+  fi
+fi
 
 echo ""
 echo "[*] Configure SSH."
-echo -n "Would you like to add the hacklab SSH config file to your system? (Y/n)"
+echo -n "Would you like to create and add the hacklab SSH config file to your system? (Y/n): "
 read install_ssh_config
 
 if [ "$install_ssh_config" = "" ] || [[ "$install_ssh_config" =~ [Y|y] ]]
 then
+
+  echo ""
+  echo " [!] Creating/overwriting the hacklab SSH config file: $HACKLAB_SSH_CONFIG_FILE_PATH."
+  echo -e "
+Host hacklab
+  \tHostName localhost
+  \tUser $primary_user_name
+  \tPort 2222
+  \tDynamicForward 1337
+
+Host hackalab-root
+  \tHostName localhost
+  \tUser root
+  \tPort 2222
+  \tDynamicForward 1337
+  " > $HACKLAB_SSH_CONFIG_FILE_PATH
 
   echo "Checking for the system SSH config directory: $SYS_SSH_CONFIG_DIR"
   if [ ! -d $SYS_SSH_CONFIG_DIR ]
