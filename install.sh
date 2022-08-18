@@ -49,8 +49,7 @@ then
   fi
 fi
 
-echo ""
-echo "[*] Create primary user account."
+echo -e "\n[*] Create primary user account."
 echo -n "Username: "
 read primary_user_name
 echo -n "Password: "
@@ -60,21 +59,19 @@ read -s primary_user_password_2
 
 if [ "$primary_user_password" != "$primary_user_password_2" ]
 then
-  echo "[!] Passwords do not match."
+  echo -e "\n[!] Passwords do not match."
   echo -n "Please try again: "
   read -s primary_user_password_3
 
   if [ "$primary_user_password" != "$primary_user_password_3" ]
   then
-    echo ""
-    echo "[!!] Fatal Error: Passwords still do not match."
+    echo -e "\n[!!] Fatal Error: Passwords still do not match."
     echo "Exiting..."
     exit -1
   fi
 fi
 
-echo ""
-echo "[*] Configure SSH."
+echo -e "\n\n[*] Configure SSH."
 echo -n "Would you like to create and add the hacklab SSH config file to your system? (Y/n): "
 read install_ssh_config
 
@@ -82,7 +79,7 @@ if [ "$install_ssh_config" = "" ] || [[ "$install_ssh_config" =~ [Y|y] ]]
 then
 
   echo ""
-  echo " [!] Creating/overwriting the hacklab SSH config file: $HACKLAB_SSH_CONFIG_FILE_PATH."
+  echo "[!] Creating/overwriting the hacklab SSH config file: $HACKLAB_SSH_CONFIG_FILE_PATH."
   echo -e "
 Host hacklab
   \tHostName localhost
