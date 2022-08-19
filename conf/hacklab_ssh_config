@@ -1,5 +1,5 @@
 Host hacklab
-  HostName localhost
-  User root
-  Port 2222
-  DynamicForward 1337
+	HostName localhost
+	User root
+	Port 2222
+	DynamicForward 1337
