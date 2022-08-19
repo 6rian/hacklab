@@ -20,11 +20,8 @@ RUN sed -i 's/\#PasswordAuthentication yes/PasswordAuthentication yes/' /etc/ssh
 # Start the SSH service
 RUN service ssh start
 
-# Change root password
+# Change root default password
 RUN echo 'root:toor' | chpasswd
-# Create primary user account
-RUN useradd -rm -d /home/brian -s /bin/bash -G sudo brian
-RUN echo 'brian:brian' | chpasswd
 
 RUN apt -y autoremove
 
