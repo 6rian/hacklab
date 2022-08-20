@@ -11,12 +11,14 @@ You will need to download and install [Docker Desktop](https://docs.docker.com/g
 *The first time setup will take around 20+ minutes to complete.*
 
 1. Clone this repository.
-2. `./install.sh` add hacklab to your SSH configuration.
-3. `docker compose up -d` to build the image and start the container.
+2. `./install.sh`
+3. `ssh hacklab` *See the `Dockerfile` for the default root password.*
+4. Change root's password: `passwd`.
 
 ## Usage
 
 ### Container Orchestration
+
 **Build and start container:**
 ```bash
 docker compose up -d
@@ -24,29 +26,23 @@ docker compose up -d
 
 **Start already built container:**
 ```bash
-docker compose start
+docker compose start hacklab
 ```
 
 **Stop container:**
 ```bash
-docker compose stop
+docker compose stop hacklab
+```
+
+**Destroy container:**
+```bash
+docker compose down
 ```
 
 ### Connecting To The Lab
 
-**Connect as the primary user:**
 ```bash
 ssh hacklab
-```
-
-**Connect as root:**
-```bash
-ssh hacklab-root
-```
-
-*or:*
-```bash
-ssh root@hacklab
 ```
 
 ### Using Burp Suite On The Host
@@ -64,3 +60,5 @@ If you see this error after a complete rebuild (meaning the root volume was dele
 ## Future Improvements
 
 [] Replace install of `kali-linux-headless` metapackage with handpicked tools to get build size and time down.
+
+[] Incorporate dotfiles.

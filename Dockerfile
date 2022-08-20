@@ -27,5 +27,4 @@ RUN apt -y autoremove
 
 WORKDIR /root
 
-# ENTRYPOINT bash $@
 CMD ["/usr/sbin/sshd", "-D"]
