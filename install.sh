@@ -7,19 +7,7 @@ HACKLAB_SSH_CONFIG_FILE_PATH="$BASE_DIR/conf/$HACKLAB_SSH_CONFIG_FILE_NAME"
 SYS_SSH_CONFIG_DIR="/etc/ssh/ssh_config.d"
 SYS_SSH_CONFIG_FILE="/etc/ssh/ssh_config"
 
-echo "
-          _______  _______  _        _        _______  ______  
-|\     /|(  ___  )(  ____ \| \    /\( \      (  ___  )(  ___ \ 
-| )   ( || (   ) || (    \/|  \  / /| (      | (   ) || (   ) )
-| (___) || (___) || |      |  (_/ / | |      | (___) || (__/ / 
-|  ___  ||  ___  || |      |   _ (  | |      |  ___  ||  __ (  
-| (   ) || (   ) || |      |  ( \ \ | |      | (   ) || (  \ \ 
-| )   ( || )   ( || (____/\|  /  \ \| (____/\| )   ( || )___) )
-|/     \||/     \|(_______/|_/    \/(_______/|/     \||/ \___/ 
-                                                               
-                                              by 6rian
-
-"
+cat banner.txt
 
 echo "[!] Preparing to build hacklab."
 echo "[!] WARNING: Running this script will erase any existing hacklab container and create a new one."
@@ -39,9 +27,7 @@ read install_ssh_config
 
 if [ "$install_ssh_config" = "" ] || [[ "$install_ssh_config" =~ [Y|y] ]]
 then
-
-  echo ""
-  echo "[!] Creating/overwriting the hacklab SSH config file: $HACKLAB_SSH_CONFIG_FILE_PATH."
+  echo -e "\n[!] Creating/overwriting the hacklab SSH config file: $HACKLAB_SSH_CONFIG_FILE_PATH."
   echo -e "Host hacklab
 \tHostName localhost
 \tUser root
@@ -68,8 +54,7 @@ then
   fi
 
   # Create a symbolic link to the hacklab SSH config file.
-  echo ""
-  echo "Checking for symlink to hacklab SSH config."
+  echo -e "\nChecking for symlink to hacklab SSH config."
   SSH_CONFIG_SYMLINK="$SYS_SSH_CONFIG_DIR/$HACKLAB_SSH_CONFIG_FILE_NAME"
   if [ ! -L $SSH_CONFIG_SYMLINK ] || [ ! -e $SSH_CONFIG_SYMLINK ]
   then
@@ -80,5 +65,8 @@ then
   fi
 fi
 
-# TODO: docker compose up -d
-echo
+echo -e "\n[*] Build and Start Docker service."
+docker compose up -d
+
+echo -e "\n[*] Installation finished!"
+echo "Run 'ssh hacklab' to connect to your lab."
