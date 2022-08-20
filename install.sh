@@ -7,9 +7,6 @@ HACKLAB_SSH_CONFIG_FILE_PATH="$BASE_DIR/conf/$HACKLAB_SSH_CONFIG_FILE_NAME"
 SYS_SSH_CONFIG_DIR="/etc/ssh/ssh_config.d"
 SYS_SSH_CONFIG_FILE="/etc/ssh/ssh_config"
 
-# # Create directory for data persistence
-# mkdir -p $DATA_DIR
-
 echo "
           _______  _______  _        _        _______  ______  
 |\     /|(  ___  )(  ____ \| \    /\( \      (  ___  )(  ___ \ 
@@ -26,6 +23,15 @@ echo "
 
 echo "[!] Preparing to build hacklab."
 echo "[!] WARNING: Running this script will erase any existing hacklab container and create a new one."
+
+echo -e "\nChecking for hacklab data persistence directory."
+if [ ! -d "$DATA_DIR" ]
+then
+  echo "[!] Directory does not exist. Creating it now."
+  mkdir -p $DATA_DIR
+else
+  echo "- Directory found."
+fi
 
 echo -e "\n[*] Configure SSH."
 echo -n "Would you like to create and add the hacklab SSH config file to your system? (Y/n): "
@@ -75,3 +81,4 @@ then
 fi
 
 # TODO: docker compose up -d
+echo
